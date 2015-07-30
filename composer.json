@@ -1,0 +1,22 @@
+{
+    "name": "alxishin/logview-bundle",
+    "description": "Log view Bundle for Symfony 2",
+    "homepage": "http://github.com/alxishin/LogViewBundle",
+    "authors": [
+        {
+            "name": "Alexander Ishin",
+            "email": "alxishin@gmail.com",
+            "role": "Developer",
+            "homepage" : "https://github.com/alxishin"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": ">=2.3"
+    },
+    "autoload": {
+        "psr-0": { "Alxishin\\LogViewBundle": "" }
+    },
+
+    "target-dir": "Alxishin/LogViewBundle"
+}
