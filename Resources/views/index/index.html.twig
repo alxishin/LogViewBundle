@@ -1,0 +1,48 @@
+{% for paramName,paramValues in routeParams %}
+    {{ paramName|capitalize|trans }}&nbsp;
+    {% for paramVal in paramValues %}
+        {% if app.request.attributes.get('_route_params')[paramName]==paramVal %}
+            <strong>{{ paramVal }}</strong>
+        {% else %}
+            <a href="{{ path('LogView', app.request.attributes.get('_route_params')|merge({(paramName):(paramVal)})) }}">{{ paramVal }}</a>&nbsp;
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{%if logs is defined%}
+    <table style="width:100%; margin: 0 0 0 0" class="table table-hover table-condensed table-bordered log-table">
+
+        {% for key,item in logs %}
+            <tr class="{{ item.tr_class }}" data-level="{{ item.level }}">
+                <td><div style="background: {{ item.background_color }};color: #ffffff;">{{ item.level_name }}</div></td>
+                <td style="max-width: 60%" title="{{ item.message }}"><span>{{ item.message | truncate(100)}}</span></td>
+                <td><span title="{{ item.datetime.date }}">{{ item.datetime.date | date('c') }}</span></td>
+                <td>{{ item.channel }}</td>
+                <td>{% if item.user is defined %}{{ item.user|raw }}{% elseif item.extra._username is defined %}{{ item.extra._username }}{% endif %}</td>
+                <td>{% if item.extra.REQUEST_URI is defined %}<a href="{{ item.extra.REQUEST_URI }}">{{ item.extra.REQUEST_URI| truncate(20)}}</a>{% endif %}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#log_item_{{ key }}">...</button>
+                    <div style="display: none; width: 80%; margin-top: -300px !important; margin-left:-500px !important;" class="modal fade bs-example-modal-lg" id="log_item_{{ key }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Description</h4>
+                                </div>
+                                <div class="modal-body" style="max-height: 525px;">
+                                    <div>{{ item.message }}</div>
+                                    <pre>{{ item.details }}</pre>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%else%}
+    <h2>Empty logs</h2>
+{%endif%}
